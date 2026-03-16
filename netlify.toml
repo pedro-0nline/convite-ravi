@@ -1,0 +1,29 @@
+[build]
+  publish = "."
+
+# Ignora ADMIN_PASSWORD no scan (senha só usada server-side na Edge Function)
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "ADMIN_PASSWORD"
+
+# Edge Functions ficam em /netlify/edge-functions
+[[edge_functions]]
+  path = "/api/config"
+  function = "config"
+
+[[edge_functions]]
+  path = "/api/login"
+  function = "login"
+
+# Headers de segurança para todo o site
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Protege o painel admin com cache zero
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"

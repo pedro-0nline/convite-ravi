@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ravi faz 1 Aninho 🦁 Safari Party</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Satisfy&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   RESET + TOKENS
+═══════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream:    #fdf6e8;
+  --warm:     #f5ead0;
+  --gold:     #d4a030;
+  --gold-lt:  #f0c060;
+  --gold-dk:  #a07020;
+  --rust:     #c05820;
+  --rust-lt:  #e8784a;
+  --rust-dk:  #8a3a10;
+  --sage:     #5a8040;
+  --sage-lt:  #8ab860;
+  --sage-dk:  #3a5828;
+  --sand:     #c8a870;
+  --ink:      #1a1208;
+  --ink2:     #3a2a14;
+  --mist:     rgba(253,246,232,0.92);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════════════════════ */
+.cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--rust);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: multiply;
+  transition: transform 0.1s var(--ease-out-expo);
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  position: fixed;
+  width: 40px; height: 40px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.12s var(--ease-out-expo), width 0.3s, height 0.3s, opacity 0.3s;
+  opacity: 0.7;
+}
+body:hover .cursor-ring { opacity: 1; }
+.cursor-ring.hovered { width: 64px; height: 64px; border-color: var(--rust-lt); opacity: 0.5; }
+
+/* ═══════════════════════════════════════════════════
+   CANVAS BACKGROUND
+═══════════════════════════════════════════════════ */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   GRAIN OVERLAY
+═══════════════════════════════════════════════════ */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.038;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE WRAPPER
+═══════════════════════════════════════════════════ */
+.page { position: relative; z-index: 2; }
+
+/* ═══════════════════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 24px 0;
+}
+
+/* Canopy SVG */
+.hero-canopy {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  width: 100%;
+  height: 52%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Sun burst rings */
+.sun-burst {
+  position: absolute;
+  top: -10vw;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw; height: 80vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(248,220,100,0.22) 0%, rgba(248,220,100,0.06) 40%, transparent 70%);
+  animation: pulseSun 6s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes pulseSun {
+  0%,100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50%      { transform: translateX(-50%) scale(1.08); opacity: 0.8; }
+}
+
+/* Title area */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: 10vh;
+}
+
+.eyebrow {
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 500;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.3s forwards;
+}
+
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(88px, 16vw, 168px);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.85;
+  color: var(--rust);
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 1s var(--ease-out-expo) 0.5s forwards;
+  letter-spacing: -2px;
+}
+
+.hero-name::after {
+  content: '';
+  position: absolute;
+  bottom: -8px; left: 10%; right: 10%;
+  height: 5px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--gold-lt), var(--gold), transparent);
+  border-radius: 3px;
+  animation: shimmerLine 3s ease-in-out infinite 1.5s;
+  transform: scaleX(0);
+  animation: growLine 0.8s var(--ease-spring) 1.2s forwards, shimmerLine 3s ease-in-out infinite 2s;
+}
+@keyframes growLine {
+  to { transform: scaleX(1); }
+}
+@keyframes shimmerLine {
+  0%,100% { opacity: 0.7; }
+  50% { opacity: 1; filter: brightness(1.3); }
+}
+
+.hero-faz {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(18px, 3vw, 32px);
+  font-weight: 300;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin-top: 18px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.7s forwards;
+}
+
+.hero-age {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.9s forwards;
+}
+.age-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(100px, 18vw, 200px);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--gold);
+  text-shadow: 0 8px 40px rgba(212,160,48,0.2);
+  animation: floatNum 5s ease-in-out infinite;
+  position: relative;
+}
+.age-number::before {
+  content: '1';
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(212,160,48,0.15);
+  transform: translate(4px, 4px);
+}
+@keyframes floatNum {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-12px) rotate(1deg); }
+}
+.age-word {
+  font-family: 'Satisfy', cursive;
+  font-size: clamp(36px, 6vw, 64px);
+  color: var(--rust-lt);
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.safari-badge {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 10px 28px;
+  border: 1.5px solid var(--gold);
+  border-radius: 100px;
+  font-size: clamp(11px, 1.4vw, 14px);
+  font-weight: 500;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold-dk);
+  background: rgba(212,160,48,0.08);
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 1.1s forwards;
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s ease 2s forwards;
+  z-index: 10;
+}
+.scroll-hint span {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--sage);
+  opacity: 0.7;
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════
+   ANIMALS PARADE SECTION
+═══════════════════════════════════════════════════ */
+.parade-section {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.savanna-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    var(--cream) 0%,
+    #e8f0d4 30%,
+    #d4e8a8 60%,
+    #c0d890 100%
+  );
+  z-index: 0;
+}
+
+.parade-inner {
+  position: relative;
+  z-index: 5;
+  padding: 80px 0 0;
+}
+
+.section-label {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--sage-dk);
+  opacity: 0.6;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 64px;
+  line-height: 1.1;
+}
+.section-title em {
+  font-style: italic;
+  color: var(--rust);
+}
+
+/* Animals grid */
+.animals-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(8px, 3vw, 48px);
+  padding: 0 clamp(16px, 5vw, 80px);
+  flex-wrap: nowrap;
+}
+
+.animal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+  cursor: none;
+}
+.animal-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.animal-card:nth-child(1) { transition-delay: 0.05s; }
+.animal-card:nth-child(2) { transition-delay: 0.15s; }
+.animal-card:nth-child(3) { transition-delay: 0.0s; }
+.animal-card:nth-child(4) { transition-delay: 0.2s; }
+.animal-card:nth-child(5) { transition-delay: 0.1s; }
+
+.animal-card svg {
+  filter: drop-shadow(0 20px 30px rgba(26,18,8,0.12));
+  transition: transform 0.4s var(--ease-spring);
+  animation: animalFloat 0s ease-in-out infinite;
+}
+.animal-card:hover svg {
+  transform: translateY(-18px) scale(1.06) rotate(-2deg);
+  filter: drop-shadow(0 36px 50px rgba(26,18,8,0.18));
+}
+.animal-card:nth-child(1) svg { animation: animalFloat 4.1s ease-in-out infinite; }
+.animal-card:nth-child(2) svg { animation: animalFloat 3.8s ease-in-out infinite 0.6s; }
+.animal-card:nth-child(3) svg { animation: animalFloat 4.4s ease-in-out infinite 0.2s; }
+.animal-card:nth-child(4) svg { animation: animalFloat 3.9s ease-in-out infinite 1.0s; }
+.animal-card:nth-child(5) svg { animation: animalFloat 4.2s ease-in-out infinite 0.4s; }
+
+@keyframes animalFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+.animal-name {
+  font-family: 'Satisfy', cursive;
+  font-size: clamp(14px, 2vw, 20px);
+  color: var(--rust);
+  margin-top: 12px;
+  opacity: 0.85;
+}
+
+/* Ground strip */
+.ground-strip {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  margin-top: -20px;
+}
+
+/* ═══════════════════════════════════════════════════
+   INFO SECTION
+═══════════════════════════════════════════════════ */
+.info-section {
+  position: relative;
+  padding: clamp(80px, 12vw, 160px) clamp(20px, 6vw, 80px);
+  overflow: hidden;
+  background: var(--ink);
+  z-index: 3;
+}
+
+/* Jungle border top */
+.jungle-border {
+  position: absolute;
+  top: -2px; left: 0; right: 0;
+  z-index: 10;
+}
+
+.info-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+
+.info-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 9vw, 110px);
+  font-weight: 900;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 0.9;
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+}
+.info-headline.visible { opacity: 1; transform: translateY(0); }
+.info-headline span { color: var(--gold); }
+
+.info-subline {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 300;
+  color: rgba(253,246,232,0.55);
+  letter-spacing: 1px;
+  margin-bottom: 72px;
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-out-expo) 0.2s;
+}
+.info-subline.visible { opacity: 1; }
+
+/* Info cards */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 3vw, 32px);
+}
+
+/* ── Tablet ── */
+@media (max-width: 900px) {
+  .hero { padding: 50px 20px 0; }
+  .hero-content { margin-top: 8vh; }
+  .hero-name { font-size: clamp(72px, 18vw, 130px); }
+  .age-number { font-size: clamp(80px, 20vw, 150px); }
+  .age-word { font-size: clamp(28px, 7vw, 52px); }
+  .animals-grid { gap: clamp(6px, 2vw, 24px); padding: 0 clamp(8px, 3vw, 40px); }
+  .animals-grid .animal-card svg { width: clamp(90px, 16vw, 148px); height: auto; }
+  .animal-name { font-size: clamp(12px, 2.5vw, 18px); }
+  .info-cards { grid-template-columns: 1fr 1fr; }
+  .info-cards .info-card:last-child { grid-column: 1 / -1; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+
+  .hero { min-height: 100svh; padding: 30px 16px 80px; justify-content: flex-start; }
+  .hero-canopy { height: 42%; }
+  .sun-burst { width: 120vw; height: 120vw; top: -20vw; }
+  .hero-content { margin-top: 36vw; gap: 0; }
+  .eyebrow { font-size: 10px; letter-spacing: 3px; margin-bottom: 6px; }
+  .hero-name { font-size: clamp(64px, 20vw, 100px); letter-spacing: -1px; }
+  .hero-faz { font-size: 16px; letter-spacing: 4px; margin-top: 8px; }
+  .hero-age { gap: 10px; margin-top: 4px; }
+  .age-number { font-size: clamp(80px, 24vw, 120px); }
+  .age-word { font-size: clamp(28px, 8vw, 44px); }
+  .safari-badge { font-size: 10px; letter-spacing: 3px; padding: 8px 16px; margin-top: 14px; }
+  .scroll-hint { bottom: 20px; }
+
+  .parade-section { min-height: auto; }
+  .parade-inner { padding: 44px 0 0; }
+  .section-title { font-size: clamp(26px, 7vw, 40px); margin-bottom: 32px; padding: 0 16px; }
+  .animals-grid { gap: 1px; padding: 0 2px; justify-content: space-around; overflow-x: hidden; }
+  .animals-grid .animal-card svg { width: clamp(54px, 17.5vw, 84px); height: auto; }
+  .animal-name { font-size: 10px; margin-top: 5px; }
+  .animal-card:hover svg { transform: none; filter: drop-shadow(0 20px 30px rgba(26,18,8,0.12)); }
+
+  .info-section { padding: 80px 18px 56px; }
+  .info-headline { font-size: clamp(36px, 11vw, 58px); line-height: 1; margin-bottom: 14px; }
+  .info-subline { font-size: 15px; margin-bottom: 36px; }
+  .info-cards { grid-template-columns: 1fr; gap: 14px; }
+  .info-cards .info-card:last-child { grid-column: auto; }
+  .info-card { padding: 24px 22px; border-radius: 18px; flex-direction: row; align-items: center; gap: 18px; display: flex; }
+  .card-icon { font-size: 34px; margin-bottom: 0; flex-shrink: 0; }
+  .card-value { font-size: clamp(17px, 5vw, 24px); }
+  .card-sub { font-size: 12px; }
+
+  .closing-section { padding: 64px 20px 56px; }
+  .closing-animals { font-size: clamp(26px, 9vw, 40px); letter-spacing: 6px; margin-bottom: 24px; }
+  .closing-tagline { font-size: clamp(26px, 8vw, 40px); margin-bottom: 14px; }
+  .closing-sub { font-size: 13px; letter-spacing: 1px; }
+  footer { font-size: 10px; padding: 22px 16px; }
+}
+
+.info-card {
+  background: rgba(253,246,232,0.04);
+  border: 1px solid rgba(212,160,48,0.18);
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 48px) clamp(24px, 3vw, 36px);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo), background 0.3s, border-color 0.3s;
+  cursor: none;
+}
+.info-card:hover {
+  background: rgba(253,246,232,0.08);
+  border-color: rgba(212,160,48,0.4);
+}
+.info-card:hover .card-icon { transform: scale(1.2) rotate(-5deg); }
+.info-card.visible { opacity: 1; transform: translateY(0); }
+.info-card:nth-child(1) { transition-delay: 0.1s; }
+.info-card:nth-child(2) { transition-delay: 0.2s; }
+.info-card:nth-child(3) { transition-delay: 0.3s; }
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.info-card:hover::before { opacity: 1; }
+
+.card-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 20px;
+  transition: transform 0.3s var(--ease-spring);
+  line-height: 1;
+}
+
+.card-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.card-value {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 3.5vw, 36px);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.card-value.placeholder {
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(253,246,232,0.3);
+  font-size: clamp(18px, 2.5vw, 26px);
+}
+
+.card-sub {
+  font-size: 13px;
+  color: rgba(253,246,232,0.35);
+  margin-top: 6px;
+  font-weight: 300;
+}
+
+/* ═══════════════════════════════════════════════════
+   RSVP SECTION
+═══════════════════════════════════════════════════ */
+.rsvp-section {
+  position: relative;
+  background: var(--cream);
+  padding: 110px clamp(20px, 6vw, 80px) 80px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.rsvp-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+}
+
+/* Form wrap */
+.rsvp-form-wrap { text-align: center; }
+
+.rsvp-eyebrow {
+  font-size: 11px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+}
+.rsvp-eyebrow.visible { opacity: 0.8; transform: translateY(0); }
+
+.rsvp-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 7vw, 80px);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s var(--ease-out-expo) 0.1s, transform 0.8s var(--ease-out-expo) 0.1s;
+}
+.rsvp-title.visible { opacity: 1; transform: translateY(0); }
+.rsvp-title em { font-style: italic; color: var(--rust); }
+
+.rsvp-desc {
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--sand);
+  margin-bottom: 48px;
+  font-weight: 300;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.2s;
+}
+.rsvp-desc.visible { opacity: 1; }
+
+/* Card */
+.rsvp-card {
+  background: white;
+  border-radius: 32px;
+  padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 56px);
+  box-shadow:
+    0 4px 0 rgba(212,160,48,0.12),
+    0 24px 80px rgba(26,18,8,0.08),
+    0 2px 0 rgba(255,255,255,0.9) inset;
+  border: 1.5px solid rgba(212,160,48,0.2);
+  text-align: left;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s var(--ease-out-expo) 0.25s, transform 0.9s var(--ease-out-expo) 0.25s;
+}
+.rsvp-card.visible { opacity: 1; transform: translateY(0); }
+
+/* Field */
+.field-group { margin-bottom: 32px; }
+
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--sage-dk);
+  margin-bottom: 12px;
+}
+
+.field-input {
+  width: 100%;
+  padding: 16px 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: var(--ink);
+  background: var(--cream);
+  border: 1.5px solid rgba(212,160,48,0.25);
+  border-radius: 16px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  -webkit-appearance: none;
+}
+.field-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(212,160,48,0.1);
+}
+.field-input::placeholder { color: rgba(26,18,8,0.28); font-style: italic; }
+
+/* Counter */
+.counter-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.counter-btn {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: transparent;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--gold-dk);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+  transition: background 0.2s, transform 0.15s var(--ease-spring), border-color 0.2s;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+}
+.counter-btn:hover { background: rgba(212,160,48,0.1); transform: scale(1.08); }
+.counter-btn:active { transform: scale(0.94); }
+.counter-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+.counter-display {
+  flex: 1;
+  text-align: center;
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 12px 16px;
+  border: 1.5px solid rgba(212,160,48,0.18);
+}
+
+.counter-num {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 8vw, 64px);
+  font-weight: 900;
+  color: var(--rust);
+  line-height: 1;
+  transition: transform 0.2s var(--ease-spring);
+}
+.counter-num.bump { animation: numBump 0.3s var(--ease-spring); }
+@keyframes numBump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
+.counter-label-sm {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sage);
+  font-weight: 500;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Submit */
+.rsvp-submit {
+  width: 100%;
+  padding: 20px 24px;
+  background: var(--rust);
+  border: none;
+  border-radius: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(18px, 3vw, 22px);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--cream);
+  cursor: pointer;
+  transition: background 0.25s, transform 0.2s var(--ease-spring), box-shadow 0.25s;
+  box-shadow: 0 8px 32px rgba(192,88,32,0.3), 0 2px 0 rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+  margin-top: 8px;
+  -webkit-appearance: none;
+}
+.rsvp-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+  border-radius: inherit;
+}
+.rsvp-submit:hover { background: var(--rust-lt); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(192,88,32,0.35); }
+.rsvp-submit:active { transform: translateY(0); }
+.rsvp-submit.loading .rsvp-submit-text { opacity: 0; }
+.rsvp-submit.loading .rsvp-submit-loader { opacity: 1; }
+.rsvp-submit-loader {
+  position: absolute;
+  inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-style: normal;
+  font-size: 24px;
+  opacity: 0;
+  animation: spin 1s linear infinite;
+  transition: opacity 0.2s;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.rsvp-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--sand);
+  margin-top: 20px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* ── SUCCESS STATE ── */
+.rsvp-success {
+  display: none;
+  text-align: center;
+  animation: successReveal 0.8s var(--ease-out-expo) forwards;
+}
+.rsvp-success.show { display: block; }
+
+@keyframes successReveal {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.success-burst {
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  box-shadow: 0 16px 48px rgba(212,160,48,0.35);
+  animation: burstPop 0.6s var(--ease-spring) 0.1s backwards;
+}
+@keyframes burstPop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.success-icon { font-size: 52px; line-height: 1; }
+
+.success-eyebrow {
+  font-size: 11px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+.success-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 7vw, 68px);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 40px;
+}
+.success-title em { font-style: italic; color: var(--rust); }
+.success-title span { color: var(--gold-dk); }
+
+/* Info box */
+.success-info-box {
+  background: white;
+  border-radius: 28px;
+  padding: clamp(28px, 4vw, 44px) clamp(24px, 4vw, 44px);
+  border: 1.5px solid rgba(212,160,48,0.22);
+  box-shadow: 0 20px 60px rgba(26,18,8,0.07);
+  text-align: left;
+  margin-bottom: 32px;
+  animation: successReveal 0.7s var(--ease-out-expo) 0.25s backwards;
+}
+
+.success-info-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.sib-icon { font-size: 28px; flex-shrink: 0; }
+.success-info-line strong { color: var(--rust); font-weight: 700; }
+
+.success-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(212,160,48,0.3), transparent);
+  margin: 20px 0;
+}
+
+.success-bring-title {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--sage-dk);
+  margin-bottom: 18px;
+}
+
+.success-bring-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bring-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--cream);
+  border-radius: 16px;
+  border: 1px solid rgba(212,160,48,0.15);
+}
+.bring-icon {
+  font-size: 36px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.bring-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.bring-item strong {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(17px, 2.5vw, 22px);
+  font-weight: 700;
+  color: var(--ink);
+}
+.bring-item span {
+  font-size: 13px;
+  color: var(--sand);
+  font-weight: 300;
+}
+
+.success-date {
+  font-size: clamp(13px, 2vw, 15px);
+  color: var(--ink2);
+  opacity: 0.6;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.success-see-you {
+  font-family: 'Satisfy', cursive;
+  font-size: clamp(28px, 5vw, 44px);
+  color: var(--rust-lt);
+  margin: 16px 0 32px;
+}
+
+.success-share {
+  display: inline-block;
+  padding: 16px 36px;
+  background: var(--sage);
+  border: none;
+  border-radius: 100px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.2s var(--ease-spring);
+  box-shadow: 0 8px 24px rgba(90,128,64,0.28);
+  -webkit-appearance: none;
+}
+.success-share:hover { background: var(--sage-lt); transform: translateY(-2px); }
+
+/* Mobile RSVP */
+@media (max-width: 600px) {
+  .rsvp-section { padding: 90px 16px 60px; }
+  .rsvp-title { font-size: clamp(34px, 9vw, 52px); }
+  .rsvp-card { padding: 28px 20px; border-radius: 24px; }
+  .counter-btn { width: 50px; height: 50px; font-size: 24px; }
+  .counter-num { font-size: clamp(38px, 10vw, 56px); }
+  .rsvp-submit { padding: 18px 20px; font-size: 18px; border-radius: 16px; }
+  .success-info-box { padding: 24px 18px; border-radius: 22px; }
+  .bring-item { padding: 14px 14px; }
+  .success-title { font-size: clamp(30px, 9vw, 48px); }
+}
+
+/* ═══════════════════════════════════════════════════
+   CLOSING SECTION
+═══════════════════════════════════════════════════ */
+.closing-section {
+  position: relative;
+  background: var(--cream);
+  padding: clamp(80px, 12vw, 140px) 24px;
+  text-align: center;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.closing-animals {
+  font-size: clamp(32px, 6vw, 56px);
+  letter-spacing: 12px;
+  display: block;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: none;
+  transition: opacity 0.8s ease, transform 0.8s var(--ease-out-expo);
+  transform: translateY(20px);
+}
+.closing-animals.visible { opacity: 1; transform: translateY(0); }
+
+.closing-tagline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 6vw, 72px);
+  font-weight: 900;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s var(--ease-out-expo) 0.1s, transform 0.9s var(--ease-out-expo) 0.1s;
+}
+.closing-tagline.visible { opacity: 1; transform: translateY(0); }
+.closing-tagline em { color: var(--rust); }
+
+.closing-sub {
+  font-size: clamp(14px, 2vw, 18px);
+  color: var(--sand);
+  letter-spacing: 2px;
+  font-weight: 300;
+  opacity: 0;
+  transition: opacity 0.9s ease 0.3s;
+}
+.closing-sub.visible { opacity: 1; }
+
+/* Decorative large "1" watermark */
+.watermark-one {
+  position: absolute;
+  font-family: 'Playfair Display', serif;
+  font-size: 40vw;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(212,160,48,0.06);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer {
+  background: var(--ink);
+  color: rgba(253,246,232,0.3);
+  text-align: center;
+  padding: 32px 24px;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 3;
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITY ANIMATIONS
+═══════════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Floating balloons */
+.balloon {
+  position: absolute;
+  animation: balloonFloat linear infinite;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.82;
+}
+@keyframes balloonFloat {
+  0%   { transform: translateY(0) rotate(var(--rot, 0deg)) scale(1); }
+  33%  { transform: translateY(-18px) rotate(calc(var(--rot, 0deg) + 3deg)) scale(1.02); }
+  66%  { transform: translateY(-8px) rotate(calc(var(--rot, 0deg) - 2deg)) scale(0.98); }
+  100% { transform: translateY(0) rotate(var(--rot, 0deg)) scale(1); }
+}
+
+/* Leaves parallax */
+.parallax-leaf {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 3;
+}
+
+/* Hide on mobile utility */
+@media (max-width: 600px) {
+  .hide-mobile { display: none !important; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Animated particle canvas -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- Grain -->
+<div class="grain"></div>
+
+<div class="page">
+
+  <!-- ════════════════════════════════
+       HERO
+  ════════════════════════════════ -->
+  <section class="hero" id="hero">
+
+    <div class="sun-burst"></div>
+
+    <!-- Canopy -->
+    <svg class="hero-canopy" viewBox="0 0 1440 560" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#cce0a0"/>
+          <stop offset="100%" stop-color="#fdf6e8" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#a0cc60"/>
+          <stop offset="100%" stop-color="#4a7828"/>
+        </linearGradient>
+        <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#78b040"/>
+          <stop offset="100%" stop-color="#3a6020"/>
+        </linearGradient>
+        <linearGradient id="lg3" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#c0e070"/>
+          <stop offset="100%" stop-color="#6a9838"/>
+        </linearGradient>
+        <linearGradient id="trunk1" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#7a5220"/>
+          <stop offset="50%" stop-color="#a87838"/>
+          <stop offset="100%" stop-color="#6a4218"/>
+        </linearGradient>
+        <filter id="leafBlur">
+          <feGaussianBlur stdDeviation="1"/>
+        </filter>
+        <filter id="leafShadow">
+          <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#1a3808" flood-opacity="0.15"/>
+        </filter>
+      </defs>
+
+      <!-- Sky wash -->
+      <rect width="1440" height="560" fill="url(#sky)"/>
+
+      <!-- ── LEFT PALM ── -->
+      <g>
+        <path d="M110 560 Q102 440 108 340 Q114 280 106 200" stroke="url(#trunk1)" stroke-width="28" fill="none" stroke-linecap="round"/>
+        <path d="M110 560 Q102 440 108 340 Q114 280 106 200" stroke="rgba(255,255,255,0.12)" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <!-- trunk rings -->
+        <g stroke="#6a4218" stroke-width="3.5" fill="none" opacity="0.35">
+          <path d="M105 440 Q118 443 122 438"/><path d="M108 400 Q121 403 125 398"/>
+          <path d="M109 360 Q122 363 126 358"/><path d="M108 320 Q121 323 125 318"/>
+        </g>
+        <!-- Fronds -->
+        <g filter="url(#leafShadow)">
+          <path d="M106 200 Q220 140 370 110 Q290 155 268 210" fill="url(#lg1)"/>
+          <path d="M106 200 Q175 95 310 52 Q238 118 224 185" fill="url(#lg2)"/>
+          <path d="M106 200 Q240 198 390 228 Q300 205 278 246" fill="url(#lg3)"/>
+          <path d="M106 200 Q62 108 10 55 Q52 125 66 200" fill="url(#lg1)" opacity="0.92"/>
+          <path d="M106 200 Q42 175 -50 205 Q20 178 32 228" fill="url(#lg2)" opacity="0.88"/>
+          <path d="M106 200 Q55 248 -30 295 Q36 252 62 284" fill="url(#lg3)" opacity="0.82"/>
+          <path d="M106 200 Q135 100 120 0 Q115 90 138 160" fill="url(#lg1)" opacity="0.9"/>
+          <path d="M106 200 Q165 168 240 118 Q185 175 192 208" fill="url(#lg2)" opacity="0.72"/>
+          <!-- coconuts -->
+          <circle cx="126" cy="210" r="18" fill="#8a6030"/>
+          <circle cx="104" cy="220" r="15" fill="#7a5020"/>
+          <circle cx="144" cy="222" r="14" fill="#9a7040"/>
+        </g>
+      </g>
+
+      <!-- ── RIGHT PALM ── -->
+      <g transform="translate(1440,0) scale(-1,1)">
+        <path d="M110 560 Q102 440 108 340 Q114 280 106 200" stroke="url(#trunk1)" stroke-width="28" fill="none" stroke-linecap="round"/>
+        <path d="M110 560 Q102 440 108 340 Q114 280 106 200" stroke="rgba(255,255,255,0.12)" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <g stroke="#6a4218" stroke-width="3.5" fill="none" opacity="0.35">
+          <path d="M105 440 Q118 443 122 438"/><path d="M108 400 Q121 403 125 398"/>
+          <path d="M109 360 Q122 363 126 358"/>
+        </g>
+        <g filter="url(#leafShadow)">
+          <path d="M106 200 Q220 140 370 110 Q290 155 268 210" fill="url(#lg1)"/>
+          <path d="M106 200 Q175 95 310 52 Q238 118 224 185" fill="url(#lg2)"/>
+          <path d="M106 200 Q240 198 390 228 Q300 205 278 246" fill="url(#lg3)"/>
+          <path d="M106 200 Q62 108 10 55 Q52 125 66 200" fill="url(#lg1)" opacity="0.92"/>
+          <path d="M106 200 Q42 175 -50 205 Q20 178 32 228" fill="url(#lg2)" opacity="0.88"/>
+          <path d="M106 200 Q55 248 -30 295 Q36 252 62 284" fill="url(#lg3)" opacity="0.82"/>
+          <path d="M106 200 Q135 100 120 0 Q115 90 138 160" fill="url(#lg1)" opacity="0.9"/>
+          <circle cx="126" cy="210" r="18" fill="#8a6030"/>
+          <circle cx="104" cy="220" r="15" fill="#7a5020"/>
+        </g>
+      </g>
+
+      <!-- Center foliage -->
+      <g opacity="0.65" filter="url(#leafBlur)">
+        <path d="M560 0 Q520 70 500 155 Q550 95 610 115 Q598 68 560 0" fill="#5a8830"/>
+        <path d="M560 0 Q608 88 632 180 Q608 100 582 115 Q582 68 560 0" fill="#78a840" opacity="0.8"/>
+        <path d="M880 0 Q840 70 820 155 Q870 95 930 115 Q918 68 880 0" fill="#5a8830"/>
+        <path d="M880 0 Q928 88 952 180 Q928 100 902 115 Q902 68 880 0" fill="#78a840" opacity="0.8"/>
+      </g>
+
+      <!-- Birds -->
+      <g fill="none" stroke="#3a5820" stroke-width="2" stroke-linecap="round" opacity="0.3">
+        <path d="M550 140 Q558 133 566 140"/><path d="M572 128 Q580 121 588 128"/>
+        <path d="M860 118 Q868 111 876 118"/><path d="M882 130 Q890 123 898 130"/>
+      </g>
+    </svg>
+
+    <!-- Balloons -->
+    <svg class="balloon" style="left:5%;top:15vh;--rot:-8deg;animation-duration:4.3s;" width="70" height="120" viewBox="0 0 70 120">
+      <ellipse cx="35" cy="44" rx="30" ry="38" fill="#e8a020" opacity="0.9"/>
+      <ellipse cx="25" cy="32" rx="10" ry="7" fill="rgba(255,255,255,0.3)" transform="rotate(-25,25,32)"/>
+      <path d="M35 82 Q32 96 35 110 Q38 96 35 82" stroke="#c07010" stroke-width="1.5" fill="none"/>
+      <path d="M22 72 Q35 80 48 72" stroke="#c07010" stroke-width="1.5" fill="none"/>
+    </svg>
+    <svg class="balloon" style="right:6%;top:12vh;--rot:6deg;animation-duration:3.7s;animation-delay:0.8s;" width="56" height="100" viewBox="0 0 56 100">
+      <ellipse cx="28" cy="35" rx="24" ry="30" fill="#8bc34a" opacity="0.88"/>
+      <ellipse cx="20" cy="26" rx="8" ry="5.5" fill="rgba(255,255,255,0.28)" transform="rotate(-25,20,26)"/>
+      <path d="M28 65 Q26 77 28 90 Q30 77 28 65" stroke="#5a9030" stroke-width="1.5" fill="none"/>
+    </svg>
+    <svg class="balloon hide-mobile" style="left:12%;top:28vh;--rot:5deg;animation-duration:5.1s;animation-delay:1.4s;" width="44" height="80" viewBox="0 0 44 80">
+      <ellipse cx="22" cy="26" rx="18" ry="23" fill="#c05820" opacity="0.8"/>
+      <ellipse cx="16" cy="19" rx="6" ry="4" fill="rgba(255,255,255,0.25)" transform="rotate(-25,16,19)"/>
+      <path d="M22 49 Q20 58 22 70 Q24 58 22 49" stroke="#8a3810" stroke-width="1.5" fill="none"/>
+    </svg>
+    <svg class="balloon hide-mobile" style="right:13%;top:30vh;--rot:-5deg;animation-duration:4.6s;animation-delay:2s;" width="44" height="80" viewBox="0 0 44 80">
+      <ellipse cx="22" cy="26" rx="18" ry="23" fill="#f0c060" opacity="0.85"/>
+      <ellipse cx="16" cy="19" rx="6" ry="4" fill="rgba(255,255,255,0.28)" transform="rotate(-25,16,19)"/>
+      <path d="M22 49 Q20 58 22 70 Q24 58 22 49" stroke="#c09010" stroke-width="1.5" fill="none"/>
+    </svg>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+      <p class="eyebrow">✦ Uma aventura incrível começa ✦</p>
+      <h1 class="hero-name">Ravi</h1>
+      <p class="hero-faz">faz</p>
+      <div class="hero-age">
+        <div class="age-number">1</div>
+        <div class="age-word">
+          <span>ani</span>
+          <span>nho</span>
+        </div>
+      </div>
+      <div class="safari-badge">🌿 Safari Party · 29 de Março · 2026 🌿</div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       ANIMALS PARADE
+  ════════════════════════════════ -->
+  <section class="parade-section" id="parade">
+    <div class="savanna-bg"></div>
+
+    <div class="parade-inner">
+      <p class="section-label observe-fade">Os convidados de honra</p>
+      <h2 class="section-title observe-fade">A turma do <em>safari</em> quer<br>te ver por lá!</h2>
+
+      <div class="animals-grid">
+
+        <!-- LION -->
+        <div class="animal-card">
+          <svg width="150" height="210" viewBox="0 0 150 210" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="mG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f0a030"/><stop offset="100%" stop-color="#c06018"/></radialGradient>
+              <radialGradient id="fG" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#ffd870"/><stop offset="100%" stop-color="#e8a830"/></radialGradient>
+              <radialGradient id="bG" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#ffd870"/><stop offset="100%" stop-color="#d89030"/></radialGradient>
+            </defs>
+            <ellipse cx="75" cy="204" rx="48" ry="7" fill="#1a1208" opacity="0.10"/>
+            <circle cx="75" cy="92" r="58" fill="url(#mG)" opacity="0.93"/>
+            <g opacity="0.72" fill="#b85018">
+              <ellipse cx="75" cy="40" rx="17" ry="22" transform="rotate(0,75,40)"/>
+              <ellipse cx="107" cy="52" rx="15" ry="20" transform="rotate(40,107,52)"/>
+              <ellipse cx="126" cy="80" rx="14" ry="19" transform="rotate(70,126,80)"/>
+              <ellipse cx="124" cy="114" rx="14" ry="19" transform="rotate(110,124,114)"/>
+              <ellipse cx="102" cy="137" rx="15" ry="20" transform="rotate(145,102,137)"/>
+              <ellipse cx="75" cy="145" rx="17" ry="19" transform="rotate(180,75,145)"/>
+              <ellipse cx="48" cy="137" rx="15" ry="20" transform="rotate(215,48,137)"/>
+              <ellipse cx="26" cy="114" rx="14" ry="19" transform="rotate(250,26,114)"/>
+              <ellipse cx="24" cy="80" rx="14" ry="19" transform="rotate(290,24,80)"/>
+              <ellipse cx="43" cy="52" rx="15" ry="20" transform="rotate(320,43,52)"/>
+            </g>
+            <circle cx="75" cy="90" r="47" fill="url(#fG)"/>
+            <ellipse cx="56" cy="70" rx="16" ry="12" fill="rgba(255,255,255,0.18)" transform="rotate(-15,56,70)"/>
+            <circle cx="42" cy="58" r="15" fill="#f0c040"/><circle cx="42" cy="58" r="9" fill="#f0a0a8"/>
+            <circle cx="108" cy="58" r="15" fill="#f0c040"/><circle cx="108" cy="58" r="9" fill="#f0a0a8"/>
+            <ellipse cx="61" cy="84" rx="12" ry="13" fill="white"/>
+            <ellipse cx="89" cy="84" rx="12" ry="13" fill="white"/>
+            <circle cx="63" cy="86" r="8" fill="#c87820"/><circle cx="63" cy="86" r="5.5" fill="#1a0e04"/>
+            <circle cx="91" cy="86" r="8" fill="#c87820"/><circle cx="91" cy="86" r="5.5" fill="#1a0e04"/>
+            <circle cx="66" cy="83" r="2.8" fill="white"/><circle cx="94" cy="83" r="2.8" fill="white"/>
+            <path d="M51 74 Q61 68 71 74" stroke="#7a4808" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M79 74 Q89 68 99 74" stroke="#7a4808" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M67 102 Q75 97 83 102 Q79 109 75 111 Q71 109 67 102Z" fill="#e06080"/>
+            <line x1="75" y1="111" x2="75" y2="116" stroke="#c04060" stroke-width="2"/>
+            <path d="M62 116 Q75 130 88 116" stroke="#c04060" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M66 117 Q75 126 84 117" fill="white" opacity="0.6"/>
+            <ellipse cx="48" cy="106" rx="11" ry="7" fill="#f08090" opacity="0.35" transform="rotate(-10,48,106)"/>
+            <ellipse cx="102" cy="106" rx="11" ry="7" fill="#f08090" opacity="0.35" transform="rotate(10,102,106)"/>
+            <ellipse cx="75" cy="172" rx="40" ry="43" fill="url(#bG)"/>
+            <ellipse cx="75" cy="176" rx="22" ry="24" fill="#fff0c0" opacity="0.5"/>
+            <ellipse cx="38" cy="163" rx="18" ry="12" fill="#e8a830" transform="rotate(25,38,163)"/>
+            <ellipse cx="112" cy="163" rx="18" ry="12" fill="#e8a830" transform="rotate(-25,112,163)"/>
+            <circle cx="32" cy="172" r="11" fill="#d89830"/>
+            <circle cx="118" cy="172" r="11" fill="#d89830"/>
+            <ellipse cx="54" cy="202" rx="16" ry="10" fill="#d89030" transform="rotate(-5,54,202)"/>
+            <ellipse cx="96" cy="202" rx="16" ry="10" fill="#d89030" transform="rotate(5,96,202)"/>
+            <path d="M113 194 Q138 183 142 164 Q146 146 135 137" stroke="#d89030" stroke-width="8" fill="none" stroke-linecap="round"/>
+            <circle cx="133" cy="134" r="9" fill="#c06018"/>
+          </svg>
+          <span class="animal-name">Leão</span>
+        </div>
+
+        <!-- ELEPHANT -->
+        <div class="animal-card">
+          <svg width="148" height="218" viewBox="0 0 148 218" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="eB" cx="40%" cy="30%" r="65%"><stop offset="0%" stop-color="#c8d8f0"/><stop offset="100%" stop-color="#8098c0"/></radialGradient>
+              <radialGradient id="eF" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#d0e0f8"/><stop offset="100%" stop-color="#90a8d0"/></radialGradient>
+            </defs>
+            <ellipse cx="74" cy="212" rx="50" ry="7" fill="#1a1208" opacity="0.10"/>
+            <ellipse cx="74" cy="164" rx="52" ry="52" fill="url(#eB)"/>
+            <ellipse cx="74" cy="168" rx="30" ry="28" fill="rgba(255,255,255,0.25)"/>
+            <ellipse cx="52" cy="140" rx="18" ry="13" fill="rgba(255,255,255,0.2)" transform="rotate(-20,52,140)"/>
+            <ellipse cx="26" cy="96" rx="30" ry="36" fill="#a0b8d8"/>
+            <ellipse cx="26" cy="96" rx="18" ry="24" fill="#f0b8c8" opacity="0.45"/>
+            <ellipse cx="122" cy="96" rx="30" ry="36" fill="#a0b8d8"/>
+            <ellipse cx="122" cy="96" rx="18" ry="24" fill="#f0b8c8" opacity="0.45"/>
+            <ellipse cx="74" cy="94" rx="50" ry="50" fill="url(#eF)"/>
+            <ellipse cx="55" cy="73" rx="17" ry="13" fill="rgba(255,255,255,0.24)" transform="rotate(-15,55,73)"/>
+            <ellipse cx="57" cy="80" rx="11" ry="12" fill="white"/>
+            <ellipse cx="91" cy="80" rx="11" ry="12" fill="white"/>
+            <circle cx="59" cy="82" r="7.5" fill="#203848"/><circle cx="59" cy="82" r="5" fill="#0a1820"/>
+            <circle cx="93" cy="82" r="7.5" fill="#203848"/><circle cx="93" cy="82" r="5" fill="#0a1820"/>
+            <circle cx="62" cy="79" r="2.8" fill="white"/><circle cx="96" cy="79" r="2.8" fill="white"/>
+            <path d="M49 70 Q57 65 65 70" stroke="#607898" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M83 70 Q91 65 99 70" stroke="#607898" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M74 128 Q62 152 57 168 Q54 182 64 188 Q72 191 78 180 Q84 166 78 150 Q76 138 74 128" fill="#9ab0d0"/>
+            <path d="M67 148 Q73 153 79 148" stroke="#8098b8" stroke-width="1.5" fill="none"/>
+            <path d="M64 162 Q71 167 77 162" stroke="#8098b8" stroke-width="1.5" fill="none"/>
+            <ellipse cx="62" cy="190" rx="8" ry="5" fill="#8090b8"/>
+            <path d="M60 107 Q74 122 88 107" stroke="#6080a8" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <ellipse cx="44" cy="104" rx="11" ry="7" fill="#f0b0c0" opacity="0.38" transform="rotate(-10,44,104)"/>
+            <ellipse cx="104" cy="104" rx="11" ry="7" fill="#f0b0c0" opacity="0.38" transform="rotate(10,104,104)"/>
+            <path d="M63 52 Q52 43 47 51 Q50 58 63 52Z" fill="#f06090"/>
+            <path d="M85 52 Q96 43 101 51 Q98 58 85 52Z" fill="#f06090"/>
+            <circle cx="74" cy="52" r="7" fill="#f890b0"/>
+            <rect x="44" y="202" width="22" height="18" rx="9" fill="#8098c0"/>
+            <rect x="82" y="202" width="22" height="18" rx="9" fill="#8098c0"/>
+            <path d="M120 180 Q132 174 134 162" stroke="#90a8c8" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <circle cx="135" cy="159" r="6" fill="#b0c8e0"/>
+          </svg>
+          <span class="animal-name">Elefante</span>
+        </div>
+
+        <!-- GIRAFFE - TALLEST -->
+        <div class="animal-card" style="margin-bottom: -12px;">
+          <svg width="138" height="248" viewBox="0 0 138 248" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="gG" cx="40%" cy="30%" r="65%"><stop offset="0%" stop-color="#fce880"/><stop offset="100%" stop-color="#d8a028"/></radialGradient>
+            </defs>
+            <ellipse cx="69" cy="242" rx="46" ry="7" fill="#1a1208" opacity="0.10"/>
+            <path d="M54 108 Q47 140 49 182 Q58 186 74 183 Q78 140 72 108Z" fill="url(#gG)"/>
+            <path d="M62 111 Q58 145 59 178" stroke="rgba(255,255,255,0.24)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="56" cy="128" rx="9" ry="6" fill="#b87018" opacity="0.7" transform="rotate(-10,56,128)"/>
+            <ellipse cx="67" cy="152" rx="10" ry="7" fill="#b87018" opacity="0.65" transform="rotate(8,67,152)"/>
+            <ellipse cx="55" cy="167" rx="8" ry="5.5" fill="#c87820" opacity="0.6"/>
+            <ellipse cx="69" cy="204" rx="47" ry="47" fill="url(#gG)"/>
+            <ellipse cx="69" cy="208" rx="26" ry="25" fill="rgba(255,255,255,0.25)"/>
+            <ellipse cx="50" cy="185" rx="14" ry="10" fill="rgba(255,255,255,0.22)" transform="rotate(-20,50,185)"/>
+            <ellipse cx="51" cy="196" rx="12" ry="9" fill="#b87018" opacity="0.62" transform="rotate(20,51,196)"/>
+            <ellipse cx="87" cy="191" rx="11" ry="8" fill="#b87018" opacity="0.58" transform="rotate(-15,87,191)"/>
+            <ellipse cx="63" cy="220" rx="10" ry="8" fill="#b87018" opacity="0.55" transform="rotate(8,63,220)"/>
+            <ellipse cx="88" cy="214" rx="9" ry="7" fill="#b87018" opacity="0.52" transform="rotate(-8,88,214)"/>
+            <ellipse cx="62" cy="82" rx="36" ry="34" fill="url(#gG)"/>
+            <ellipse cx="48" cy="66" rx="13" ry="9" fill="rgba(255,255,255,0.24)" transform="rotate(-15,48,66)"/>
+            <rect x="48" y="47" width="8" height="22" rx="4" fill="#c87820"/>
+            <circle cx="52" cy="45" r="6.5" fill="#e0a030"/>
+            <rect x="65" y="45" width="8" height="20" rx="4" fill="#c87820"/>
+            <circle cx="69" cy="43" r="5.5" fill="#e0a030"/>
+            <ellipse cx="32" cy="76" rx="13" ry="9" fill="url(#gG)" transform="rotate(-20,32,76)"/>
+            <ellipse cx="32" cy="76" rx="7" ry="5.5" fill="#f0b0b8" opacity="0.5" transform="rotate(-20,32,76)"/>
+            <ellipse cx="92" cy="76" rx="13" ry="9" fill="url(#gG)" transform="rotate(20,92,76)"/>
+            <ellipse cx="92" cy="76" rx="7" ry="5.5" fill="#f0b0b8" opacity="0.5" transform="rotate(20,92,76)"/>
+            <ellipse cx="49" cy="72" rx="10" ry="11" fill="white"/>
+            <ellipse cx="75" cy="72" rx="10" ry="11" fill="white"/>
+            <circle cx="51" cy="74" r="7" fill="#603808"/><circle cx="51" cy="74" r="4.5" fill="#1a0e04"/>
+            <circle cx="77" cy="74" r="7" fill="#603808"/><circle cx="77" cy="74" r="4.5" fill="#1a0e04"/>
+            <circle cx="54" cy="71" r="2.3" fill="white"/><circle cx="80" cy="71" r="2.3" fill="white"/>
+            <path d="M41 63 Q49 58 57 63" stroke="#a07020" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M67 63 Q75 58 83 63" stroke="#a07020" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <ellipse cx="62" cy="96" rx="20" ry="15" fill="#e8c050"/>
+            <ellipse cx="55" cy="98" rx="3.5" ry="2.5" fill="#b88020" opacity="0.6"/>
+            <ellipse cx="69" cy="98" rx="3.5" ry="2.5" fill="#b88020" opacity="0.6"/>
+            <path d="M51 104 Q62 116 73 104" stroke="#a07020" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="40" cy="92" rx="9" ry="6.5" fill="#f090a8" opacity="0.38" transform="rotate(-10,40,92)"/>
+            <ellipse cx="84" cy="92" rx="9" ry="6.5" fill="#f090a8" opacity="0.38" transform="rotate(10,84,92)"/>
+            <rect x="40" y="236" width="18" height="14" rx="7" fill="#d8a028"/>
+            <rect x="78" y="236" width="18" height="14" rx="7" fill="#d8a028"/>
+            <rect x="47" y="235" width="16" height="12" rx="6" fill="#d8a028"/>
+            <rect x="69" y="235" width="16" height="12" rx="6" fill="#d8a028"/>
+            <ellipse cx="49" cy="248" rx="11" ry="4.5" fill="#6a4010"/>
+            <ellipse cx="77" cy="248" rx="11" ry="4.5" fill="#6a4010"/>
+            <path d="M113 218 Q125 210 127 197" stroke="#d8a028" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="127" cy="194" rx="5" ry="8" fill="#b88020"/>
+          </svg>
+          <span class="animal-name">Girafa</span>
+        </div>
+
+        <!-- MONKEY -->
+        <div class="animal-card">
+          <svg width="148" height="216" viewBox="0 0 148 216" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="mB2" cx="40%" cy="30%" r="65%"><stop offset="0%" stop-color="#b07840"/><stop offset="100%" stop-color="#6a3e18"/></radialGradient>
+            </defs>
+            <ellipse cx="74" cy="210" rx="48" ry="7" fill="#1a1208" opacity="0.10"/>
+            <ellipse cx="74" cy="164" rx="46" ry="48" fill="url(#mB2)"/>
+            <ellipse cx="74" cy="170" rx="24" ry="26" fill="#f8d0a0" opacity="0.7"/>
+            <ellipse cx="53" cy="142" rx="15" ry="11" fill="rgba(255,255,255,0.16)" transform="rotate(-20,53,142)"/>
+            <circle cx="74" cy="88" r="48" fill="url(#mB2)"/>
+            <ellipse cx="54" cy="67" rx="17" ry="13" fill="rgba(255,255,255,0.17)" transform="rotate(-15,54,67)"/>
+            <ellipse cx="74" cy="96" rx="32" ry="30" fill="#f8d0a0"/>
+            <ellipse cx="63" cy="83" rx="11" ry="8.5" fill="rgba(255,255,255,0.28)" transform="rotate(-10,63,83)"/>
+            <circle cx="28" cy="88" r="21" fill="#9a6830"/>
+            <circle cx="28" cy="88" r="13" fill="#d09060"/>
+            <circle cx="120" cy="88" r="21" fill="#9a6830"/>
+            <circle cx="120" cy="88" r="13" fill="#d09060"/>
+            <ellipse cx="59" cy="80" rx="12" ry="13" fill="white"/>
+            <ellipse cx="89" cy="80" rx="12" ry="13" fill="white"/>
+            <circle cx="61" cy="82" r="8.5" fill="#1a0e04"/><circle cx="61" cy="82" r="5.5" fill="#080604"/>
+            <circle cx="91" cy="82" r="8.5" fill="#1a0e04"/><circle cx="91" cy="82" r="5.5" fill="#080604"/>
+            <circle cx="65" cy="79" r="3.2" fill="white"/><circle cx="95" cy="79" r="3.2" fill="white"/>
+            <path d="M51 71 Q59 64 67 71" stroke="#5a3010" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M81 71 Q89 64 97 71" stroke="#5a3010" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <ellipse cx="74" cy="96" rx="8.5" ry="6.5" fill="#7a4a1a"/>
+            <circle cx="68" cy="96" r="2.8" fill="#5a3010" opacity="0.6"/>
+            <circle cx="80" cy="96" r="2.8" fill="#5a3010" opacity="0.6"/>
+            <path d="M56 108 Q74 126 92 108" stroke="#7a4a1a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M61 109 Q74 122 87 109" fill="white" opacity="0.6"/>
+            <ellipse cx="46" cy="104" rx="11" ry="7.5" fill="#f09090" opacity="0.4" transform="rotate(-10,46,104)"/>
+            <ellipse cx="102" cy="104" rx="11" ry="7.5" fill="#f09090" opacity="0.4" transform="rotate(10,102,104)"/>
+            <path d="M46 45 Q74 -4 102 45Z" fill="#e85820"/>
+            <path d="M46 45 Q74 -4 102 45Z" fill="none" stroke="#f07040" stroke-width="2"/>
+            <line x1="74" y1="-4" x2="60" y2="41" stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
+            <line x1="74" y1="-4" x2="88" y2="41" stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
+            <ellipse cx="74" cy="45" rx="24" ry="6.5" fill="#c84010"/>
+            <circle cx="74" cy="-7" r="10" fill="#f8d030"/>
+            <path d="M118 132 Q136 118 138 102 Q134 92 125 100 Q116 108 118 121Z" fill="#f8d030"/>
+            <path d="M118 132 Q136 118 138 102" stroke="#c8a020" stroke-width="2" fill="none"/>
+            <ellipse cx="33" cy="154" rx="22" ry="12" fill="#9a6828" transform="rotate(30,33,154)"/>
+            <ellipse cx="115" cy="144" rx="24" ry="12" fill="#9a6828" transform="rotate(-35,115,144)"/>
+            <circle cx="22" cy="161" r="13" fill="#7a5018"/>
+            <circle cx="126" cy="132" r="12" fill="#7a5018"/>
+            <ellipse cx="52" cy="204" rx="21" ry="14" fill="#7a5018" transform="rotate(8,52,204)"/>
+            <ellipse cx="96" cy="204" rx="21" ry="14" fill="#7a5018" transform="rotate(-8,96,204)"/>
+            <ellipse cx="47" cy="213" rx="17" ry="9.5" fill="#6a4010"/>
+            <ellipse cx="101" cy="213" rx="17" ry="9.5" fill="#6a4010"/>
+            <path d="M116 188 Q138 176 140 156 Q143 139 133 134" stroke="#7a5018" stroke-width="9" fill="none" stroke-linecap="round"/>
+            <circle cx="132" cy="131" r="7" fill="#7a5018"/>
+          </svg>
+          <span class="animal-name">Macaco</span>
+        </div>
+
+        <!-- ZEBRA -->
+        <div class="animal-card">
+          <svg width="148" height="212" viewBox="0 0 148 212" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="zG" cx="40%" cy="30%" r="65%"><stop offset="0%" stop-color="#f8f4ee"/><stop offset="100%" stop-color="#d8d0c4"/></radialGradient>
+            </defs>
+            <ellipse cx="74" cy="206" rx="50" ry="7" fill="#1a1208" opacity="0.10"/>
+            <ellipse cx="74" cy="162" rx="50" ry="50" fill="url(#zG)"/>
+            <ellipse cx="53" cy="138" rx="17" ry="13" fill="rgba(255,255,255,0.5)" transform="rotate(-20,53,138)"/>
+            <path d="M44 140 Q60 133 73 140 Q66 153 48 157Z" fill="#1a1a1a" opacity="0.7"/>
+            <path d="M78 138 Q95 131 108 140 Q101 152 84 156Z" fill="#1a1a1a" opacity="0.7"/>
+            <path d="M38 156 Q52 149 62 157 Q56 168 40 170Z" fill="#1a1a1a" opacity="0.62"/>
+            <path d="M88 155 Q104 148 113 157 Q107 167 92 169Z" fill="#1a1a1a" opacity="0.62"/>
+            <path d="M45 171 Q57 165 65 173 Q59 183 46 183Z" fill="#1a1a1a" opacity="0.55"/>
+            <path d="M85 170 Q100 164 108 172 Q102 181 89 181Z" fill="#1a1a1a" opacity="0.55"/>
+            <ellipse cx="74" cy="84" r="42" fill="url(#zG)"/>
+            <ellipse cx="57" cy="65" rx="15" ry="11" fill="rgba(255,255,255,0.5)" transform="rotate(-15,57,65)"/>
+            <path d="M54 63 Q63 56 72 62 Q68 73 53 75Z" fill="#1a1a1a" opacity="0.7"/>
+            <path d="M76 62 Q85 55 94 62 Q90 73 76 73Z" fill="#1a1a1a" opacity="0.7"/>
+            <path d="M55 77 Q63 72 69 79 Q65 88 54 89Z" fill="#1a1a1a" opacity="0.62"/>
+            <path d="M79 77 Q87 72 93 79 Q89 88 79 88Z" fill="#1a1a1a" opacity="0.62"/>
+            <path d="M58 49 Q62 30 64 20 Q67 30 67 49" fill="#1a1a1a" opacity="0.85"/>
+            <path d="M66 48 Q70 29 72 19 Q75 29 75 48" fill="#1a1a1a" opacity="0.85"/>
+            <path d="M73 48 Q77 29 79 19 Q82 29 82 48" fill="#1a1a1a" opacity="0.85"/>
+            <path d="M80 49 Q84 30 86 20 Q89 30 89 49" fill="#1a1a1a" opacity="0.85"/>
+            <ellipse cx="47" cy="58" rx="13" ry="18" fill="url(#zG)" transform="rotate(-15,47,58)"/>
+            <ellipse cx="47" cy="58" rx="7" ry="10" fill="#f0a0b0" opacity="0.5" transform="rotate(-15,47,58)"/>
+            <path d="M43 49 Q47 42 51 49" stroke="#1a1a1a" stroke-width="2" fill="none" opacity="0.6"/>
+            <ellipse cx="101" cy="58" rx="13" ry="18" fill="url(#zG)" transform="rotate(15,101,58)"/>
+            <ellipse cx="101" cy="58" rx="7" ry="10" fill="#f0a0b0" opacity="0.5" transform="rotate(15,101,58)"/>
+            <ellipse cx="60" cy="80" rx="12" ry="13" fill="white"/>
+            <ellipse cx="88" cy="80" rx="12" ry="13" fill="white"/>
+            <circle cx="62" cy="82" r="8.5" fill="#1a0e04"/><circle cx="62" cy="82" r="5.5" fill="#080604"/>
+            <circle cx="90" cy="82" r="8.5" fill="#1a0e04"/><circle cx="90" cy="82" r="5.5" fill="#080604"/>
+            <circle cx="66" cy="79" r="3" fill="white"/><circle cx="94" cy="79" r="3" fill="white"/>
+            <path d="M53 72 Q60 67 67 72" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M81 72 Q88 67 95 72" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="74" cy="104" rx="22" ry="17" fill="#ece4d8"/>
+            <ellipse cx="67" cy="106" rx="4" ry="3" fill="#a0a0a0" opacity="0.5"/>
+            <ellipse cx="81" cy="106" rx="4" ry="3" fill="#a0a0a0" opacity="0.5"/>
+            <line x1="74" y1="93" x2="74" y2="100" stroke="#1a1a1a" stroke-width="2.5" opacity="0.5"/>
+            <path d="M62 112 Q74 126 86 112" stroke="#706060" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M66 113 Q74 123 82 113" fill="white" opacity="0.55"/>
+            <ellipse cx="48" cy="103" rx="11" ry="7.5" fill="#f0a0b0" opacity="0.36" transform="rotate(-10,48,103)"/>
+            <ellipse cx="100" cy="103" rx="11" ry="7.5" fill="#f0a0b0" opacity="0.36" transform="rotate(10,100,103)"/>
+            <rect x="44" y="198" width="22" height="17" rx="8.5" fill="#d8d0c4"/>
+            <rect x="82" y="198" width="22" height="17" rx="8.5" fill="#d8d0c4"/>
+            <rect x="44" y="202" width="22" height="5" rx="2.5" fill="#1a1a1a" opacity="0.6"/>
+            <rect x="82" y="202" width="22" height="5" rx="2.5" fill="#1a1a1a" opacity="0.6"/>
+            <rect x="44" y="211" width="22" height="4" rx="2" fill="#1a1a1a" opacity="0.5"/>
+            <rect x="82" y="211" width="22" height="4" rx="2" fill="#1a1a1a" opacity="0.5"/>
+            <ellipse cx="55" cy="213" rx="12.5" ry="5" fill="#303030"/>
+            <ellipse cx="93" cy="213" rx="12.5" ry="5" fill="#303030"/>
+            <path d="M122 184 Q138 175 140 162" stroke="#d8d0c4" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M122 184 Q138 175 140 162" stroke="#1a1a1a" stroke-width="6" stroke-dasharray="5,5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="140" cy="159" rx="5.5" ry="9" fill="#1a1a1a"/>
+          </svg>
+          <span class="animal-name">Zebra</span>
+        </div>
+
+      </div><!-- /animals-grid -->
+    </div>
+
+    <!-- Ground SVG -->
+    <svg class="ground-strip" viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="groundG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#9ac858"/>
+          <stop offset="100%" stop-color="#70a038"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="720" cy="100" rx="820" ry="80" fill="url(#groundG)" opacity="0.6"/>
+      <ellipse cx="200" cy="100" rx="320" ry="62" fill="#88b848" opacity="0.45"/>
+      <ellipse cx="1240" cy="100" rx="320" ry="62" fill="#88b848" opacity="0.45"/>
+      <!-- flowers -->
+      <circle cx="180" cy="62" r="6" fill="#f8d040" opacity="0.8"/>
+      <circle cx="480" cy="58" r="5" fill="#f08080" opacity="0.7"/>
+      <circle cx="760" cy="56" r="6" fill="#f8d040" opacity="0.8"/>
+      <circle cx="1020" cy="58" r="5" fill="#f08080" opacity="0.7"/>
+      <circle cx="1280" cy="62" r="6" fill="#f8d040" opacity="0.8"/>
+      <!-- grass blades -->
+      <g stroke="#4a7818" stroke-linecap="round" fill="none">
+        <path d="M100 70 Q105 48 108 34" stroke-width="3.5"/><path d="M112 68 Q108 50 105 36" stroke-width="3"/>
+        <path d="M300 66 Q305 44 308 30" stroke-width="3.5"/><path d="M314 64 Q310 46 307 32" stroke-width="3"/>
+        <path d="M540 63 Q545 41 548 27" stroke-width="3.5"/><path d="M554 62 Q550 44 547 28" stroke-width="3"/>
+        <path d="M720 62 Q725 40 728 26" stroke-width="3.5"/><path d="M734 61 Q730 43 727 27" stroke-width="3"/>
+        <path d="M900 63 Q905 41 908 27" stroke-width="3.5"/><path d="M914 62 Q910 44 907 28" stroke-width="3"/>
+        <path d="M1140 65 Q1145 43 1148 29" stroke-width="3.5"/><path d="M1154 64 Q1150 46 1147 30" stroke-width="3"/>
+        <path d="M1360 68 Q1365 46 1368 32" stroke-width="3.5"/><path d="M1374 67 Q1370 49 1367 33" stroke-width="3"/>
+      </g>
+    </svg>
+
+  </section>
+
+  <!-- ════════════════════════════════
+       INFO SECTION
+  ════════════════════════════════ -->
+  <section class="info-section" id="info">
+
+    <!-- Jungle top border -->
+    <svg class="jungle-border" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 90 Q60 40 120 70 Q180 30 240 60 Q300 20 360 55 Q420 15 480 50 Q540 10 600 45 Q660 5 720 40 Q780 0 840 35 Q900 -5 960 30 Q1020 -10 1080 25 Q1140 -15 1200 20 Q1260 -10 1320 15 Q1380 -5 1440 10 L1440 0 L0 0Z" fill="#1a1208"/>
+      <!-- Leaves peeking over -->
+      <ellipse cx="100" cy="15" rx="55" ry="25" fill="#4a7828" opacity="0.85"/>
+      <ellipse cx="300" cy="10" rx="60" ry="28" fill="#5a8830" opacity="0.8"/>
+      <ellipse cx="540" cy="8" rx="65" ry="30" fill="#4a7828" opacity="0.82"/>
+      <ellipse cx="780" cy="6" rx="70" ry="32" fill="#5a8830" opacity="0.78"/>
+      <ellipse cx="1000" cy="9" rx="65" ry="30" fill="#4a7828" opacity="0.8"/>
+      <ellipse cx="1200" cy="12" rx="60" ry="27" fill="#5a8830" opacity="0.82"/>
+      <ellipse cx="1380" cy="8" rx="55" ry="25" fill="#4a7828" opacity="0.78"/>
+    </svg>
+
+    <div class="info-inner">
+      <h2 class="info-headline" data-observe>
+        Você está<br><span>convidado!</span>
+      </h2>
+      <p class="info-subline" data-observe>Venha celebrar essa aventura incrível com a gente 🌿</p>
+
+      <div class="info-cards">
+        <div class="info-card" data-observe>
+          <span class="card-icon">📅</span>
+          <span class="card-label">Data</span>
+          <span class="card-value">29 de Março<br>de 2026</span>
+          <span class="card-sub">Domingo · Marque na agenda! 🗓️</span>
+        </div>
+        <div class="info-card" data-observe>
+          <span class="card-icon">⏰</span>
+          <span class="card-label">Horário</span>
+          <span class="card-value">13h00</span>
+          <span class="card-sub">Não chegue tarde! 😄</span>
+        </div>
+        <div class="info-card" data-observe>
+          <span class="card-icon">📍</span>
+          <span class="card-label">Local</span>
+          <span class="card-value" style="font-size:clamp(16px,2.2vw,26px);">Av. Senador Canedo<br>Qd 1, Lt 1</span>
+          <span class="card-sub">Venha com alegria! 🌿</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Background decorative "1" -->
+    <div style="position:absolute;bottom:-5%;right:-2%;font-family:'Playfair Display',serif;font-size:30vw;font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(212,160,48,0.06);line-height:1;pointer-events:none;user-select:none;z-index:0;">1</div>
+  </section>
+
+  <!-- ════════════════════════════════
+       RSVP SECTION
+  ════════════════════════════════ -->
+  <section class="rsvp-section" id="rsvp">
+
+    <!-- top leaf border -->
+    <svg style="position:absolute;top:-2px;left:0;width:100%;z-index:5;" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 90 Q60 40 120 70 Q180 30 240 60 Q300 20 360 55 Q420 15 480 50 Q540 10 600 45 Q660 5 720 40 Q780 0 840 35 Q900 -5 960 30 Q1020 -10 1080 25 Q1140 -15 1200 20 Q1260 -10 1320 15 Q1380 -5 1440 10 L1440 0 L0 0Z" fill="#1a1208"/>
+      <ellipse cx="80"   cy="14" rx="50" ry="22" fill="#4a7828" opacity="0.85"/>
+      <ellipse cx="280"  cy="9"  rx="58" ry="26" fill="#5a8830" opacity="0.8"/>
+      <ellipse cx="520"  cy="7"  rx="62" ry="28" fill="#4a7828" opacity="0.82"/>
+      <ellipse cx="760"  cy="5"  rx="68" ry="30" fill="#5a8830" opacity="0.78"/>
+      <ellipse cx="980"  cy="8"  rx="62" ry="28" fill="#4a7828" opacity="0.8"/>
+      <ellipse cx="1190" cy="11" rx="58" ry="26" fill="#5a8830" opacity="0.82"/>
+      <ellipse cx="1380" cy="7"  rx="52" ry="24" fill="#4a7828" opacity="0.78"/>
+    </svg>
+
+    <div class="rsvp-inner">
+
+      <!-- ── FORM STATE ── -->
+      <div class="rsvp-form-wrap" id="rsvpFormWrap">
+        <p class="rsvp-eyebrow" data-observe>✦ Confirmação de presença ✦</p>
+        <h2 class="rsvp-title" data-observe>Você <em>vem</em> à<br>festa do Ravi?</h2>
+        <p class="rsvp-desc" data-observe>Conta pra gente quantas pessoas vão aparecer nessa aventura! 🌿</p>
+
+        <div class="rsvp-card" data-observe>
+
+          <!-- Name input -->
+          <div class="field-group">
+            <label class="field-label" for="guestName">Seu nome</label>
+            <input class="field-input" id="guestName" type="text" placeholder="Como você se chama?" autocomplete="off"/>
+          </div>
+
+          <!-- Counter -->
+          <div class="field-group">
+            <label class="field-label">Quantas pessoas vão?</label>
+            <div class="counter-row">
+              <button class="counter-btn" id="btnMinus" type="button" aria-label="Diminuir">−</button>
+              <div class="counter-display">
+                <span class="counter-num" id="counterNum">1</span>
+                <span class="counter-label-sm">pessoa<span id="counterPlural"></span></span>
+              </div>
+              <button class="counter-btn" id="btnPlus" type="button" aria-label="Aumentar">+</button>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button class="rsvp-submit" id="rsvpSubmit" type="button">
+            <span class="rsvp-submit-text">Confirmar presença 🦁</span>
+            <span class="rsvp-submit-loader" id="rsvpLoader">⏳</span>
+          </button>
+
+          <p class="rsvp-note">Ao confirmar, você receberá as instruções para o dia 🎉</p>
+        </div>
+      </div>
+
+      <!-- ── SUCCESS STATE ── -->
+      <div class="rsvp-success" id="rsvpSuccess">
+        <div class="success-burst">
+          <span class="success-icon">🦁</span>
+        </div>
+
+        <p class="success-eyebrow">Uhuuul! Confirmado!</p>
+        <h2 class="success-title">A gente <em>te espera</em>,<br><span id="successName">amigo</span>!</h2>
+
+        <div class="success-info-box">
+          <p class="success-info-line">
+            <span class="sib-icon">👥</span>
+            <span>Confirmado para <strong id="successCount">1 pessoa</strong></span>
+          </p>
+          <div class="success-divider"></div>
+          <p class="success-bring-title">📋 Não esqueça de trazer:</p>
+          <div class="success-bring-items">
+            <div class="bring-item">
+              <span class="bring-icon">🥩</span>
+              <div>
+                <strong>1 kg de carne</strong>
+                <span>Para o churrasco da festa!</span>
+              </div>
+            </div>
+            <div class="bring-item">
+              <span class="bring-icon">🥤</span>
+              <div>
+                <strong>Sua bebida favorita</strong>
+                <span>O que você gostar de tomar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="success-date">📅 29 de Março · 13h00 · Av. Senador Canedo, Qd 1 Lt 1</p>
+        <p class="success-see-you">Até lá! 🎉🌿</p>
+
+        <button class="success-share" id="shareBtn" type="button">Compartilhar convite 📲</button>
+      </div>
+
+    </div><!-- /rsvp-inner -->
+  </section>
+
+  <!-- ════════════════════════════════
+       CLOSING
+  ════════════════════════════════ -->
+  <section class="closing-section">
+    <div class="watermark-one">1</div>
+
+    <!-- Bottom jungle border -->
+    <svg style="position:absolute;top:-2px;left:0;right:0;width:100%;" viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0 Q60 50 120 20 Q180 60 240 30 Q300 70 360 35 Q420 75 480 40 Q540 80 600 45 Q660 85 720 50 Q780 90 840 55 Q900 85 960 60 Q1020 90 1080 65 Q1140 85 1200 70 Q1260 90 1320 75 Q1380 95 1440 80 L1440 90 L0 90Z" fill="#1a1208"/>
+    </svg>
+
+    <span class="closing-animals" data-observe>🦁 🐘 🦒 🐒 🦓</span>
+    <h2 class="closing-tagline" data-observe>
+      Com muito amor,<br>a família do <em>Ravi</em>
+    </h2>
+    <p class="closing-sub" data-observe>Confirmações e informações pelo WhatsApp</p>
+  </section>
+
+  <footer>
+    🌿 Ravi · 1 Aninho · Safari Party · 2026 🌿
+  </footer>
+
+</div><!-- /page -->
+
+<script>
+/* ─────────────────────────────────────────
+   CURSOR (desktop only)
+───────────────────────────────────────── */
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mx = -100, my = -100, rx = -100, ry = -100;
+
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+if (!isTouch) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    cursorRing.style.left = rx + 'px';
+    cursorRing.style.top  = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .animal-card, .info-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursorRing.classList.add('hovered'));
+    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovered'));
+  });
+}
+
+/* ─────────────────────────────────────────
+   CANVAS BACKGROUND – organic particles
+───────────────────────────────────────── */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const palette = [
+  [212,160,48],  // gold
+  [138,184,96],  // sage
+  [192,88,32],   // rust
+  [200,168,112], // sand
+  [90,128,64],   // dark sage
+];
+
+const blobs = Array.from({length: 8}, (_, i) => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  r: 200 + Math.random() * 250,
+  c: palette[i % palette.length],
+  vx: (Math.random() - 0.5) * 0.18,
+  vy: (Math.random() - 0.5) * 0.14,
+  phase: Math.random() * Math.PI * 2,
+  spd: 0.003 + Math.random() * 0.004,
+}));
+
+const dots = Array.from({length: 40}, () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  r: 1.5 + Math.random() * 4,
+  c: palette[Math.floor(Math.random() * palette.length)],
+  vx: (Math.random() - 0.5) * 0.25,
+  vy: -0.08 - Math.random() * 0.2,
+  a: 0.25 + Math.random() * 0.45,
+  ph: Math.random() * Math.PI * 2,
+  wob: 0.003 + Math.random() * 0.005,
+  rect: Math.random() > 0.6,
+}));
+
+let t = 0;
+function render() {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Creamy gradient base
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0,   '#eaf2d8');
+  bg.addColorStop(0.4, '#f5eedd');
+  bg.addColorStop(0.8, '#fdf6e8');
+  bg.addColorStop(1,   '#f0e8d0');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Blobs
+  blobs.forEach(b => {
+    b.x += b.vx; b.y += b.vy;
+    if (b.x < -b.r) b.x = W + b.r; if (b.x > W + b.r) b.x = -b.r;
+    if (b.y < -b.r) b.y = H + b.r; if (b.y > H + b.r) b.y = -b.r;
+    const bx = b.x + Math.sin(t * b.spd + b.phase) * 55;
+    const by = b.y + Math.cos(t * b.spd * 0.7 + b.phase) * 38;
+    const g = ctx.createRadialGradient(bx, by, 0, bx, by, b.r);
+    g.addColorStop(0,   `rgba(${b.c},0.07)`);
+    g.addColorStop(1,   `rgba(${b.c},0.00)`);
+    ctx.beginPath(); ctx.arc(bx, by, b.r, 0, Math.PI*2);
+    ctx.fillStyle = g; ctx.fill();
+  });
+
+  // Particles
+  dots.forEach(p => {
+    p.y += p.vy; p.x += p.vx;
+    if (p.y < -20) { p.y = H + 20; p.x = Math.random() * W; }
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    const alpha = p.a * (0.65 + 0.35 * Math.sin(t * 0.025 + p.ph));
+    ctx.save();
+    ctx.translate(p.x + Math.sin(t * p.wob + p.ph) * 7, p.y);
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = `rgb(${p.c})`;
+    if (p.rect) {
+      ctx.rotate(t * 0.006 + p.ph);
+      ctx.fillRect(-p.r, -p.r * 0.5, p.r * 2, p.r);
+    } else {
+      ctx.beginPath(); ctx.arc(0, 0, p.r, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  });
+
+  t++;
+  requestAnimationFrame(render);
+}
+render();
+
+/* ─────────────────────────────────────────
+   PARALLAX on scroll (desktop only)
+───────────────────────────────────────── */
+const isMobile = () => window.innerWidth <= 600;
+window.addEventListener('scroll', () => {
+  if (isMobile()) return;
+  const sy = window.scrollY;
+  const canopy = document.querySelector('.hero-canopy');
+  const sunBurst = document.querySelector('.sun-burst');
+  if (canopy)   canopy.style.transform   = `translateY(${sy * 0.35}px)`;
+  if (sunBurst) sunBurst.style.transform = `translateX(-50%) translateY(${sy * 0.2}px)`;
+});
+
+/* ─────────────────────────────────────────
+   CONFIGURAÇÃO – preencha seus dados aqui
+───────────────────────────────────────── */
+/* ─────────────────────────────────────────
+   CONFIG – carregado do servidor via Edge Function
+   As credenciais ficam nas env vars do Netlify,
+   nunca expostas no código-fonte.
+───────────────────────────────────────── */
+let CONFIG = null;
+
+async function loadConfig() {
+  try {
+    const res = await fetch('/api/config');
+    if (res.ok) {
+      CONFIG = await res.json();
+    }
+  } catch {
+    // fallback: modo demo local
+    CONFIG = { supabaseUrl: '', supabaseKey: '' };
+  }
+}
+
+/* ─────────────────────────────────────────
+   SUPABASE – salvar confirmação
+───────────────────────────────────────── */
+async function saveRSVP(name, guests) {
+  if (!CONFIG) await loadConfig();
+
+  const configured = CONFIG.supabaseUrl && CONFIG.supabaseUrl.length > 0;
+
+  if (configured) {
+    const res = await fetch(`${CONFIG.supabaseUrl}/rest/v1/rsvps`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': CONFIG.supabaseKey,
+        'Authorization': `Bearer ${CONFIG.supabaseKey}`,
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({ name, guests, confirmed_at: new Date().toISOString() }),
+    });
+    if (!res.ok) throw new Error(`Supabase error: ${res.status}`);
+  } else {
+    // Modo demo: salva no localStorage (desenvolvimento local)
+    const list = JSON.parse(localStorage.getItem('rsvps') || '[]');
+    list.push({ name, guests, confirmed_at: new Date().toISOString() });
+    localStorage.setItem('rsvps', JSON.stringify(list));
+    await new Promise(r => setTimeout(r, 700));
+  }
+}
+
+/* ─────────────────────────────────────────
+   RSVP – counter + form + success
+───────────────────────────────────────── */
+let guestCount = 1;
+const MIN = 1, MAX = 30;
+
+const counterNum   = document.getElementById('counterNum');
+const counterPlural= document.getElementById('counterPlural');
+const btnMinus     = document.getElementById('btnMinus');
+const btnPlus      = document.getElementById('btnPlus');
+const rsvpSubmit   = document.getElementById('rsvpSubmit');
+const rsvpLoader   = document.getElementById('rsvpLoader');
+const rsvpFormWrap = document.getElementById('rsvpFormWrap');
+const rsvpSuccess  = document.getElementById('rsvpSuccess');
+const successCount = document.getElementById('successCount');
+const successName  = document.getElementById('successName');
+const shareBtn     = document.getElementById('shareBtn');
+
+function updateCounter() {
+  counterNum.textContent = guestCount;
+  counterPlural.textContent = guestCount > 1 ? 's' : '';
+  btnMinus.disabled = guestCount <= MIN;
+  btnPlus.disabled  = guestCount >= MAX;
+
+  // bump animation
+  counterNum.classList.remove('bump');
+  void counterNum.offsetWidth; // reflow
+  counterNum.classList.add('bump');
+}
+updateCounter();
+
+btnMinus.addEventListener('click', () => {
+  if (guestCount > MIN) { guestCount--; updateCounter(); }
+});
+btnPlus.addEventListener('click', () => {
+  if (guestCount < MAX) { guestCount++; updateCounter(); }
+});
+
+rsvpSubmit.addEventListener('click', () => {
+  const nameInput = document.getElementById('guestName');
+  const name = nameInput.value.trim();
+
+  if (!name) {
+    nameInput.style.borderColor = 'var(--rust)';
+    nameInput.style.boxShadow = '0 0 0 4px rgba(192,88,32,0.12)';
+    nameInput.focus();
+    nameInput.placeholder = 'Por favor, informe seu nome 🦁';
+    setTimeout(() => {
+      nameInput.style.borderColor = '';
+      nameInput.style.boxShadow = '';
+    }, 2200);
+    return;
+  }
+
+  // Show loading
+  rsvpSubmit.classList.add('loading');
+  rsvpSubmit.disabled = true;
+
+  // ── Save to Supabase + notify via WhatsApp ──
+  saveRSVP(name, guestCount).then(() => {
+    const firstName = name.split(' ')[0];
+    successName.textContent = firstName;
+    const p = guestCount === 1 ? '1 pessoa' : `${guestCount} pessoas`;
+    successCount.textContent = p;
+
+    rsvpFormWrap.style.opacity = '0';
+    rsvpFormWrap.style.transform = 'translateY(-20px)';
+    rsvpFormWrap.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+
+    setTimeout(() => {
+      rsvpFormWrap.style.display = 'none';
+      rsvpSuccess.classList.add('show');
+      rsvpSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      launchConfetti();
+    }, 380);
+  }).catch(err => {
+    console.error('Erro ao salvar:', err);
+    rsvpSubmit.classList.remove('loading');
+    rsvpSubmit.disabled = false;
+    rsvpSubmit.querySelector('.rsvp-submit-text').textContent = '⚠️ Erro, tente de novo';
+    setTimeout(() => {
+      rsvpSubmit.querySelector('.rsvp-submit-text').textContent = 'Confirmar presença 🦁';
+    }, 2500);
+  });
+});
+
+// Mini confetti
+function launchConfetti() {
+  const colors = ['#d4a030','#e8784a','#8ab860','#f0c060','#c05820'];
+  const container = document.querySelector('.rsvp-section');
+  for (let i = 0; i < 48; i++) {
+    const el = document.createElement('div');
+    const size = 6 + Math.random() * 8;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const startX = 30 + Math.random() * 40; // % from left
+    const angle  = -60 + Math.random() * 120;
+    const dist   = 120 + Math.random() * 180;
+    const dur    = 0.8 + Math.random() * 0.8;
+    const delay  = Math.random() * 0.4;
+
+    el.style.cssText = `
+      position:absolute;
+      width:${size}px;height:${size * (Math.random() > 0.5 ? 0.5 : 1)}px;
+      background:${color};
+      border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      left:${startX}%;top:30%;
+      pointer-events:none;
+      z-index:20;
+      animation: confettiFly${i} ${dur}s ease-out ${delay}s forwards;
+    `;
+    const rad = angle * Math.PI / 180;
+    const dx = Math.cos(rad) * dist;
+    const dy = Math.sin(rad) * dist - 60;
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes confettiFly${i} {
+        0%   { transform: translate(0,0) rotate(0deg) scale(1); opacity:1; }
+        100% { transform: translate(${dx}px,${dy}px) rotate(${360+Math.random()*360}deg) scale(0); opacity:0; }
+      }
+    `;
+    document.head.appendChild(style);
+    container.appendChild(el);
+    setTimeout(() => { el.remove(); style.remove(); }, (dur + delay + 0.1) * 1000);
+  }
+}
+
+// Share button
+shareBtn.addEventListener('click', async () => {
+  const shareData = {
+    title: 'Ravi faz 1 aninho! 🦁',
+    text: '🎉 Você está convidado para o Safari Party do Ravi! Venha celebrar essa aventura! 29/03/2026 às 13h00 - Av. Senador Canedo, Qd 1 Lt 1',
+    url: window.location.href
+  };
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      shareBtn.textContent = 'Link copiado! ✅';
+      setTimeout(() => shareBtn.textContent = 'Compartilhar convite 📲', 2500);
+    }
+  } catch(e) {}
+});
+
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.18 });
+
+document.querySelectorAll('.animal-card, .info-card, [data-observe], .observe-fade').forEach(el => {
+  observer.observe(el);
+});
+
+</script>
+</body>
+</html>

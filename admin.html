@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Safari Party do Ravi 🦁</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink:     #1a1208;
+  --cream:   #fdf6e8;
+  --gold:    #d4a030;
+  --gold-lt: #f0c060;
+  --rust:    #c05820;
+  --rust-lt: #e8784a;
+  --sage:    #5a8040;
+  --sage-lt: #8ab860;
+  --sand:    #c8a870;
+  --red:     #e05040;
+  --green:   #4a9060;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ink);
+  color: var(--cream);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── LOGIN SCREEN ── */
+#loginScreen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-card {
+  background: rgba(253,246,232,0.05);
+  border: 1px solid rgba(212,160,48,0.2);
+  border-radius: 28px;
+  padding: 52px 44px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+}
+
+.login-icon { font-size: 56px; display: block; margin-bottom: 20px; }
+
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 900;
+  font-style: italic;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+.login-title span { color: var(--gold); }
+
+.login-sub {
+  font-size: 13px;
+  color: rgba(253,246,232,0.4);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(253,246,232,0.06);
+  border: 1.5px solid rgba(212,160,48,0.22);
+  border-radius: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  color: var(--cream);
+  outline: none;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.login-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(212,160,48,0.1);
+}
+.login-input::placeholder { color: rgba(253,246,232,0.2); letter-spacing: 2px; }
+
+.login-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--gold);
+  border: none;
+  border-radius: 14px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.login-btn:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.login-btn:active { transform: translateY(0); }
+
+.login-error {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--red);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.login-error.show { opacity: 1; }
+
+/* ── ADMIN DASHBOARD ── */
+#adminScreen { display: none; flex-direction: column; min-height: 100vh; }
+
+/* Header */
+.admin-header {
+  background: rgba(253,246,232,0.04);
+  border-bottom: 1px solid rgba(212,160,48,0.15);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.admin-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 900;
+  font-style: italic;
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.admin-logo span { color: var(--gold); }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+
+.btn-refresh {
+  padding: 10px 20px;
+  background: rgba(212,160,48,0.12);
+  border: 1px solid rgba(212,160,48,0.25);
+  border-radius: 10px;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 1px;
+}
+.btn-refresh:hover { background: rgba(212,160,48,0.22); }
+
+.btn-logout {
+  padding: 10px 20px;
+  background: rgba(224,80,64,0.1);
+  border: 1px solid rgba(224,80,64,0.2);
+  border-radius: 10px;
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-logout:hover { background: rgba(224,80,64,0.2); }
+
+/* Stats bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  padding: 28px 32px;
+  background: rgba(253,246,232,0.02);
+  border-bottom: 1px solid rgba(212,160,48,0.1);
+}
+
+.stat-card {
+  background: rgba(253,246,232,0.04);
+  border: 1px solid rgba(212,160,48,0.14);
+  border-radius: 18px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(253,246,232,0.4);
+  font-weight: 500;
+}
+.stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+}
+.stat-value.green { color: var(--sage-lt); }
+.stat-sub {
+  font-size: 12px;
+  color: rgba(253,246,232,0.3);
+  margin-top: 2px;
+}
+
+/* Table area */
+.table-wrap {
+  flex: 1;
+  padding: 28px 32px;
+  overflow-x: auto;
+}
+
+.table-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.table-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--cream);
+}
+
+.search-input {
+  padding: 10px 16px;
+  background: rgba(253,246,232,0.05);
+  border: 1px solid rgba(212,160,48,0.18);
+  border-radius: 10px;
+  color: var(--cream);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 220px;
+}
+.search-input::placeholder { color: rgba(253,246,232,0.25); }
+.search-input:focus { border-color: var(--gold); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+
+thead th {
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(253,246,232,0.35);
+  font-weight: 500;
+  padding: 0 16px 16px;
+  border-bottom: 1px solid rgba(212,160,48,0.1);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(253,246,232,0.05);
+  transition: background 0.15s;
+}
+tbody tr:hover { background: rgba(253,246,232,0.03); }
+tbody tr:last-child { border-bottom: none; }
+
+td {
+  padding: 16px;
+  font-size: 15px;
+  color: var(--cream);
+  vertical-align: middle;
+}
+
+.td-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--cream);
+  font-weight: 700;
+}
+
+.td-guests {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(212,160,48,0.1);
+  border: 1px solid rgba(212,160,48,0.2);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.td-time {
+  color: rgba(253,246,232,0.4);
+  font-size: 13px;
+}
+
+.td-delete {
+  text-align: right;
+}
+.delete-btn {
+  background: none;
+  border: none;
+  color: rgba(224,80,64,0.4);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.delete-btn:hover { color: var(--red); background: rgba(224,80,64,0.1); }
+
+/* Empty / loading */
+.table-message {
+  text-align: center;
+  padding: 60px 24px;
+  color: rgba(253,246,232,0.25);
+  font-size: 16px;
+}
+.table-message span { display: block; font-size: 36px; margin-bottom: 12px; }
+
+/* Config banner */
+.config-banner {
+  display: none;
+  margin: 0 32px 20px;
+  background: rgba(212,160,48,0.08);
+  border: 1px solid rgba(212,160,48,0.25);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+.config-banner.show { display: block; }
+.config-banner h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.config-banner p { font-size: 14px; color: rgba(253,246,232,0.6); line-height: 1.6; margin-bottom: 6px; }
+.config-banner code {
+  font-family: monospace;
+  background: rgba(253,246,232,0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--gold-lt);
+  font-size: 13px;
+}
+
+/* Footer */
+.admin-footer {
+  border-top: 1px solid rgba(212,160,48,0.1);
+  padding: 16px 32px;
+  font-size: 12px;
+  color: rgba(253,246,232,0.2);
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .admin-header { padding: 16px 20px; }
+  .stats-bar { padding: 20px; gap: 12px; grid-template-columns: 1fr 1fr; }
+  .stat-value { font-size: 32px; }
+  .table-wrap { padding: 20px; }
+  .search-input { width: 100%; }
+  td, th { padding: 12px 10px; }
+  .login-card { padding: 36px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="loginScreen">
+  <div class="login-card">
+    <span class="login-icon">🦁</span>
+    <h1 class="login-title">Painel <span>Admin</span></h1>
+    <p class="login-sub">Safari Party · Ravi 1 aninho</p>
+    <input
+      class="login-input"
+      id="passwordInput"
+      type="password"
+      placeholder="Senha secreta"
+      autocomplete="off"
+    />
+    <button class="login-btn" id="loginBtn">Entrar no safari 🌿</button>
+    <p class="login-error" id="loginError">Senha incorreta. Tente de novo 🙈</p>
+  </div>
+</div>
+
+<!-- ── ADMIN DASHBOARD ── -->
+<div id="adminScreen">
+
+  <header class="admin-header">
+    <div class="admin-logo">🦁 Safari Party · <span>Admin</span></div>
+    <div class="header-actions">
+      <button class="btn-refresh" id="btnRefresh">↻ Atualizar</button>
+      <button class="btn-logout" id="btnLogout">Sair</button>
+    </div>
+  </header>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-card">
+      <span class="stat-label">Confirmações</span>
+      <span class="stat-value" id="statRsvps">—</span>
+      <span class="stat-sub">respostas recebidas</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Total de pessoas</span>
+      <span class="stat-value green" id="statGuests">—</span>
+      <span class="stat-sub">vão aparecer</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Carne necessária</span>
+      <span class="stat-value" id="statMeat" style="font-size:32px;">—</span>
+      <span class="stat-sub">1 kg por família confirmada</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Última confirmação</span>
+      <span class="stat-value" id="statLast" style="font-size:20px;margin-top:4px;">—</span>
+      <span class="stat-sub" id="statLastTime"></span>
+    </div>
+  </div>
+
+  <!-- Config help banner -->
+  <div class="config-banner" id="configBanner">
+    <h3>⚙️ Modo demonstração (dados locais)</h3>
+    <p>O Supabase ainda não está configurado. Os dados abaixo são do <code>localStorage</code> deste navegador.</p>
+    <p>Para ativar o banco real, abra <code>index.html</code> e preencha <code>CONFIG.supabaseUrl</code> e <code>CONFIG.supabaseKey</code>.</p>
+    <p>Veja o arquivo <code>SETUP.md</code> para o passo a passo completo. 🌿</p>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header-row">
+      <h2 class="table-title">Lista de confirmados</h2>
+      <input class="search-input" id="searchInput" type="text" placeholder="🔍 Buscar por nome…"/>
+    </div>
+
+    <div id="tableContainer">
+      <div class="table-message"><span>⏳</span>Carregando confirmações…</div>
+    </div>
+  </div>
+
+  <footer class="admin-footer">
+    🌿 Painel exclusivo · Safari Party do Ravi · 29/03/2026
+  </footer>
+
+</div>
+
+<script>
+/* ─────────────────────────────────────────
+   CONFIG – vem do servidor (Edge Function /api/config)
+   Senha validada server-side em /api/login
+   Nenhuma credencial fica no código-fonte.
+───────────────────────────────────────── */
+let CONFIG = null;
+
+async function loadConfig() {
+  try {
+    const res = await fetch('/api/config');
+    CONFIG = res.ok ? await res.json() : { supabaseUrl: '', supabaseKey: '' };
+  } catch {
+    CONFIG = { supabaseUrl: '', supabaseKey: '' };
+  }
+}
+
+const isConfigured = () => CONFIG?.supabaseUrl?.length > 0;
+
+/* ─────────────────────────────────────────
+   LOGIN – senha verificada no servidor
+───────────────────────────────────────── */
+const loginScreen   = document.getElementById('loginScreen');
+const adminScreen   = document.getElementById('adminScreen');
+const passwordInput = document.getElementById('passwordInput');
+const loginBtn      = document.getElementById('loginBtn');
+const loginError    = document.getElementById('loginError');
+
+async function tryLogin() {
+  const password = passwordInput.value;
+  loginBtn.textContent = '…';
+  loginBtn.disabled = true;
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+
+    if (res.ok) {
+      sessionStorage.setItem('safari_admin', '1');
+      loginScreen.style.display = 'none';
+      adminScreen.style.display = 'flex';
+      await loadConfig();
+      loadRSVPs();
+    } else {
+      // Senha errada
+      loginError.classList.add('show');
+      passwordInput.value = '';
+      passwordInput.style.borderColor = '#e05040';
+      passwordInput.focus();
+      setTimeout(() => {
+        loginError.classList.remove('show');
+        passwordInput.style.borderColor = '';
+      }, 2500);
+    }
+  } catch {
+    loginError.textContent = 'Erro de conexão. Tente de novo.';
+    loginError.classList.add('show');
+    setTimeout(() => loginError.classList.remove('show'), 2500);
+  } finally {
+    loginBtn.textContent = 'Entrar no safari 🌿';
+    loginBtn.disabled = false;
+  }
+}
+
+loginBtn.addEventListener('click', tryLogin);
+passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+document.getElementById('btnLogout').addEventListener('click', () => {
+  sessionStorage.removeItem('safari_admin');
+  location.reload();
+});
+
+// Restaura sessão ativa
+if (sessionStorage.getItem('safari_admin')) {
+  loginScreen.style.display = 'none';
+  adminScreen.style.display = 'flex';
+  loadConfig().then(() => loadRSVPs());
+}
+
+/* ─────────────────────────────────────────
+   LOAD RSVPs
+───────────────────────────────────────── */
+let allRsvps = [];
+
+async function loadRSVPs() {
+  document.getElementById('tableContainer').innerHTML =
+    '<div class="table-message"><span>⏳</span>Carregando…</div>';
+
+  try {
+    if (isConfigured()) {
+      const res = await fetch(
+        `${CONFIG.supabaseUrl}/rest/v1/rsvps?select=*&order=confirmed_at.desc`,
+        { headers: { 'apikey': CONFIG.supabaseKey, 'Authorization': `Bearer ${CONFIG.supabaseKey}` } }
+      );
+      if (!res.ok) throw new Error(res.status);
+      allRsvps = await res.json();
+      document.getElementById('configBanner').classList.remove('show');
+    } else {
+      // Modo demo – localStorage (desenvolvimento local sem Netlify)
+      allRsvps = JSON.parse(localStorage.getItem('rsvps') || '[]')
+        .reverse()
+        .map((r, i) => ({ id: i + 1, ...r }));
+      document.getElementById('configBanner').classList.add('show');
+    }
+
+    renderStats(allRsvps);
+    renderTable(allRsvps);
+  } catch(e) {
+    document.getElementById('tableContainer').innerHTML =
+      `<div class="table-message"><span>⚠️</span>Erro ao carregar: ${e.message}</div>`;
+  }
+}
+
+document.getElementById('btnRefresh').addEventListener('click', loadRSVPs);
+
+/* ─────────────────────────────────────────
+   STATS
+───────────────────────────────────────── */
+function renderStats(data) {
+  const totalRsvps  = data.length;
+  const totalGuests = data.reduce((s, r) => s + (r.guests || 1), 0);
+  const meatKg      = totalRsvps; // 1 kg por família
+
+  document.getElementById('statRsvps').textContent  = totalRsvps;
+  document.getElementById('statGuests').textContent = totalGuests;
+  document.getElementById('statMeat').textContent   = `${meatKg} kg`;
+
+  if (data.length > 0) {
+    const last = data[0];
+    document.getElementById('statLast').textContent     = last.name;
+    document.getElementById('statLastTime').textContent =
+      new Date(last.confirmed_at).toLocaleString('pt-BR', { dateStyle:'short', timeStyle:'short' });
+  } else {
+    document.getElementById('statLast').textContent = '—';
+  }
+}
+
+/* ─────────────────────────────────────────
+   TABLE
+───────────────────────────────────────── */
+function renderTable(data) {
+  const container = document.getElementById('tableContainer');
+
+  if (data.length === 0) {
+    container.innerHTML =
+      '<div class="table-message"><span>🦒</span>Nenhuma confirmação ainda. Divulgue o convite!</div>';
+    return;
+  }
+
+  const rows = data.map(r => {
+    const dt = new Date(r.confirmed_at).toLocaleString('pt-BR', {
+      day:'2-digit', month:'2-digit', year:'numeric',
+      hour:'2-digit', minute:'2-digit'
+    });
+    return `
+      <tr data-name="${(r.name||'').toLowerCase()}" data-id="${r.id}">
+        <td><span class="td-name">${escHtml(r.name)}</span></td>
+        <td><span class="td-guests">👥 ${r.guests || 1} pessoa${(r.guests||1) > 1 ? 's' : ''}</span></td>
+        <td class="td-time">${dt}</td>
+        <td class="td-delete">
+          <button class="delete-btn" title="Remover" onclick="deleteRSVP('${r.id}', this)">🗑</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  container.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Pessoas</th>
+          <th>Confirmou em</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+/* Search */
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  document.querySelectorAll('tbody tr').forEach(tr => {
+    tr.style.display = !q || tr.dataset.name.includes(q) ? '' : 'none';
+  });
+});
+
+/* Delete */
+async function deleteRSVP(id, btn) {
+  if (!confirm('Remover essa confirmação?')) return;
+  btn.textContent = '⏳';
+  btn.disabled = true;
+
+  try {
+    if (isConfigured()) {
+      await fetch(`${CONFIG.supabaseUrl}/rest/v1/rsvps?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: { 'apikey': CONFIG.supabaseKey, 'Authorization': `Bearer ${CONFIG.supabaseKey}` }
+      });
+    } else {
+      let list = JSON.parse(localStorage.getItem('rsvps') || '[]');
+      list.splice(Number(id) - 1, 1);
+      localStorage.setItem('rsvps', JSON.stringify(list));
+    }
+    await loadRSVPs();
+  } catch(e) {
+    btn.textContent = '🗑';
+    btn.disabled = false;
+    alert('Erro ao remover: ' + e.message);
+  }
+}
+
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
